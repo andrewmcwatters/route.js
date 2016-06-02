@@ -16,6 +16,12 @@ definition is matched.
 #### Returns
 self
 
+## Properties
+
+### `route.pathname`
+Is a String containing an initial '/' followed by the path of the URL. If
+changed, the associated document navigates to the new route.
+
 ## Events
 
 ### routechange

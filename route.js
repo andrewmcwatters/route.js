@@ -80,7 +80,6 @@
     var router = window.router;
     var el = document.querySelector('[data-view]');
     if (el) {
-      console.log(el);
       el.innerHTML = router.template;
       var event = new CustomEvent('viewcontentloaded');
       el.dispatchEvent(event);
