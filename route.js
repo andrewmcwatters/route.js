@@ -51,7 +51,10 @@
     var route  = routes[path] || routes[null];
     if (!route) { return; }
 
-    if (route.templateUrl) {
+    if (route.template) {
+      Route.template = route.template;
+      onroutechange(route);
+    } else if (route.templateUrl) {
       getTemplateFor(route, function(template) {
         Route.template = template;
         onroutechange(route);
