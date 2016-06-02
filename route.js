@@ -1,7 +1,19 @@
-(function(window, document, location) {
+(function(window, document, location, history) {
   function Route() {
     this.routes = {};
   }
+
+  var pathname = location.pathname;
+
+  Object.defineProperty(Route, 'pathname', {
+    enumerable: true,
+    get: function() { return pathname; },
+    set: function(newValue) {
+      pathname = newValue;
+      history.pushState({}, document.title, newValue);
+      onpopstate();
+    }
+  })
 
   Route.prototype.when = function(path, route) {
     this.routes[path] = route;
@@ -74,4 +86,29 @@
   }
 
   window.addEventListener('routechange', view);
-})(window, document, location);
+
+  var IGNORE_URI_REGEXP = /^\s*(javascript|mailto):/i;
+
+  function onclick(event) {
+    if (event.ctrlKey || event.shiftKey || event.metaKey) { return; }
+    if (event.button === 2) { return; }
+
+    var el = event.target;
+
+    while (el.nodeName !== 'A') {
+      if (el === document.body || !(el = el.parentNode)) { return; }
+    }
+
+    var absHref = el.href;
+    var relHref = el.getAttribute('href');
+
+    if (IGNORE_URI_REGEXP.test(absHref)) return;
+
+    if (absHref && !el.getAttribute('target') && !event.defaultPrevented) {
+      console.log(absHref, relHref);
+      event.preventDefault();
+    }
+  }
+
+  document.body.addEventListener('click', onclick);
+})(window, document, location, history);
