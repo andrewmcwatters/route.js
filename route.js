@@ -1,19 +1,16 @@
 (function(window, document, location, history) {
   function Route() {
     this.routes = {};
+
+    Object.defineProperty(this, 'pathname', {
+      enumerable: true,
+      get: function() { return location.pathname; },
+      set: function(newValue) {
+        history.pushState({}, document.title, newValue);
+        onpopstate();
+      }
+    });
   }
-
-  var pathname = location.pathname;
-
-  Object.defineProperty(Route, 'pathname', {
-    enumerable: true,
-    get: function() { return pathname; },
-    set: function(newValue) {
-      pathname = newValue;
-      history.pushState({}, document.title, newValue);
-      onpopstate();
-    }
-  })
 
   Route.prototype.when = function(path, route) {
     this.routes[path] = route;
@@ -33,8 +30,7 @@
 
     request.onload = function() {
       if (request.status >= 200 && request.status < 400) {
-        var data = request.responseText;
-        callback(data);
+        callback(request.responseText);
       }
     };
 
@@ -53,6 +49,8 @@
     var routes = Route.routes;
     var path   = location.pathname;
     var route  = routes[path] || routes[null];
+    if (!route) { return; }
+
     if (route.templateUrl) {
       getTemplateFor(route, function(template) {
         Route.template = template;
@@ -79,6 +77,7 @@
     var router = window.router;
     var el = document.querySelector('[data-view]');
     if (el) {
+      console.log(el);
       el.innerHTML = router.template;
       var event = new CustomEvent('viewcontentloaded');
       el.dispatchEvent(event);
@@ -105,10 +104,12 @@
     if (IGNORE_URI_REGEXP.test(absHref)) return;
 
     if (absHref && !el.getAttribute('target') && !event.defaultPrevented) {
-      console.log(absHref, relHref);
       event.preventDefault();
+      window.route.pathname = relHref[0] === '/' ? relHref : '/' + relHref;
     }
   }
 
-  document.body.addEventListener('click', onclick);
+  ready(function() {
+    document.body.addEventListener('click', onclick);
+  });
 })(window, document, location, history);
