@@ -3,24 +3,24 @@
     this.routes = {};
   }
 
-  Route.prototype.when = function(path, route) {
-    this.routes[path] = route;
+  Route.prototype.when = function(path, handler) {
+    this.routes[path] = handler;
     return this;
   };
 
-  Route.prototype.otherwise = function(route) {
-    this.when(null, route);
+  Route.prototype.otherwise = function(handler) {
+    this.when(null, handler);
     return this;
   };
 
   window.route = new Route();
 
   window.onpopstate = function(event) {
-    var route    = window.route;
-    var routes   = route.routes;
-    var path     = location.pathname;
-    var listener = routes[path] || routes[null];
-    if (listener) { listener(); }
+    var route   = window.route;
+    var routes  = route.routes;
+    var path    = location.pathname;
+    var handler = routes[path] || routes[null];
+    if (handler) { handler(); }
   };
 
   function ready(fn) {
