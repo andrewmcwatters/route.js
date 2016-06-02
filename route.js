@@ -15,7 +15,7 @@
 
   window.route = new Route();
 
-  window.onpopstate = function(event) {
+  window.onpopstate = function() {
     var route   = window.route;
     var routes  = route.routes;
     var path    = location.pathname;
