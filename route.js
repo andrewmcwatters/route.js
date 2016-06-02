@@ -15,13 +15,15 @@
 
   window.route = new Route();
 
-  window.onpopstate = function() {
+  function onpopstate() {
     var route   = window.route;
     var routes  = route.routes;
     var path    = location.pathname;
     var handler = routes[path] || routes[null];
     if (handler) { handler(); }
-  };
+  }
+
+  window.addEventListener('popstate', onpopstate);
 
   function ready(fn) {
     if (document.readyState != 'loading'){
@@ -31,5 +33,5 @@
     }
   }
 
-  ready(window.onpopstate);
+  ready(onpopstate);
 })(window, document, location);
