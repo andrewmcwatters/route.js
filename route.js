@@ -77,10 +77,10 @@
   ready(onpopstate);
 
   function view() {
-    var router = window.router;
+    var route = window.route;
     var el = document.querySelector('[data-view]');
     if (el) {
-      el.innerHTML = router.template;
+      el.innerHTML = route.template;
       var event = new CustomEvent('viewcontentloaded');
       el.dispatchEvent(event);
     }
