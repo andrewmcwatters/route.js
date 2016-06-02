@@ -3,13 +3,13 @@ Used for configuring routes
 
 ## Methods
 
-### `route.when(path, handler);`
+### `route.when(path, route);`
 Adds a new route definition to the `Route` interface.
 
 #### Returns
 self
 
-### `route.otherwise(handler);`
+### `route.otherwise(params);`
 Sets route definition that will be used on route change when no other route
 definition is matched.
 
