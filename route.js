@@ -1,4 +1,4 @@
-(function(window, document, location, history) {
+(function() {
   function Route() {
     this.routes = {};
 
@@ -114,4 +114,4 @@
   ready(function() {
     document.body.addEventListener('click', onclick);
   });
-})(window, document, location, history);
+})();
