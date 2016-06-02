@@ -1,5 +1,5 @@
 # route.js
-Used for configuring routes
+Provides routing and deeplinking
 
 ## Methods
 
