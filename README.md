@@ -1,6 +1,14 @@
 # route.js
 Provides routing and deeplinking
 
+## Install
+
+### npm
+
+```shell
+npm install andrewmcwatters/route.js
+```
+
 ## Methods
 
 ### `route.when(path, route);`

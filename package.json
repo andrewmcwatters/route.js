@@ -1,0 +1,19 @@
+{
+  "name": "route.js",
+  "version": "1.0.0",
+  "description": "Provides routing and deeplinking",
+  "main": "route.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/andrewmcwatters/route.js.git"
+  },
+  "author": "Andrew McWatters",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/andrewmcwatters/route.js/issues"
+  },
+  "homepage": "https://github.com/andrewmcwatters/route.js#readme"
+}
