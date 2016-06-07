@@ -107,7 +107,10 @@
 
     if (absHref && !el.getAttribute('target') && !event.defaultPrevented) {
       event.preventDefault();
-      window.route.pathname = relHref[0] === '/' ? relHref : '/' + relHref;
+      var pathname = relHref[0] === '/' ? relHref : '/' + relHref;
+      if (location.pathname !== pathname) {
+        window.route.pathname = pathname;
+      }
     }
   }
 
