@@ -62,6 +62,11 @@
     var route  = routes[path] || routes[null];
     if (!route) { return; }
 
+    if (route.redirectTo) {
+      Route.pathname = route.redirectTo;
+      return;
+    }
+
     if (route.template) {
       Route.template = route.template;
       onroutechange(route);
