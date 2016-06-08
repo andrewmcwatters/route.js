@@ -24,9 +24,14 @@
 
   window.route = new Route();
 
+  function getBaseHref() {
+    var el = document.querySelector('base');
+    return el ? el.getAttribute('href').replace(/\/$/, '') : '';
+  }
+
   function getTemplateFor(route, callback) {
     var request = new XMLHttpRequest();
-    request.open('GET', route.templateUrl, true);
+    request.open('GET', getBaseHref() + route.templateUrl, true);
 
     request.onload = function() {
       if (request.status >= 200 && request.status < 400) {
@@ -42,16 +47,6 @@
 
     var event = new CustomEvent('routechange');
     window.dispatchEvent(event);
-  }
-
-  function getBaseHref() {
-    var el = document.querySelector('base');
-    if (!el) { return ''; }
-    var baseHref = location.href;
-    baseHref     = baseHref.replace(location.pathname, '');
-    baseHref     = el.href.replace(baseHref, '');
-    baseHref     = baseHref === '/' ? '' : baseHref;
-    return baseHref;
   }
 
   function onpopstate() {
