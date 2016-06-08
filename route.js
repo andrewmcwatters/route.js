@@ -31,7 +31,9 @@
 
   function getTemplateFor(route, callback) {
     var request = new XMLHttpRequest();
-    request.open('GET', getBaseHref() + route.templateUrl, true);
+    var templateUrl = route.templateUrl;
+    templateUrl = templateUrl[0] === '/' ? templateUrl : '/' + templateUrl;
+    request.open('GET', getBaseHref() + templateUrl, true);
 
     request.onload = function() {
       if (request.status >= 200 && request.status < 400) {
