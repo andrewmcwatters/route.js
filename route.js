@@ -1,11 +1,19 @@
 (function() {
+  function getBaseHref() {
+    var el = document.querySelector('base');
+    return el ? el.getAttribute('href').replace(/\/$/, '') : '';
+  }
+
   function Route() {
     this.routes = {};
 
     Object.defineProperty(this, 'pathname', {
       enumerable: true,
-      get: function() { return location.pathname; },
+      get: function() {
+        return location.pathname.replace(getBaseHref(), '');
+      },
       set: function(newValue) {
+        newValue = getBaseHref() + newValue;
         history.pushState({}, document.title, newValue);
         onpopstate();
       }
@@ -23,11 +31,6 @@
   };
 
   window.route = new Route();
-
-  function getBaseHref() {
-    var el = document.querySelector('base');
-    return el ? el.getAttribute('href').replace(/\/$/, '') : '';
-  }
 
   function getTemplateFor(route, callback) {
     var request = new XMLHttpRequest();
@@ -54,7 +57,7 @@
   function onpopstate() {
     var Route  = window.route;
     var routes = Route.routes;
-    var path   = location.pathname.replace(getBaseHref(), '');
+    var path   = Route.pathname;
     var route  = routes[path] || routes[null];
     if (!route) { return; }
 
@@ -114,8 +117,7 @@
 
     if (absHref && !el.getAttribute('target') && !event.defaultPrevented) {
       event.preventDefault();
-      var relHref = relHref[0] === '/' ? relHref : '/' + relHref;
-      var pathname = getBaseHref() + relHref;
+      var pathname = relHref[0] === '/' ? relHref : '/' + relHref;
       if (location.pathname !== pathname) {
         window.route.pathname = pathname;
       }
