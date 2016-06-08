@@ -44,10 +44,20 @@
     window.dispatchEvent(event);
   }
 
+  function getBaseHref() {
+    var el = document.querySelector('base');
+    if (!el) { return ''; }
+    var baseHref = location.href;
+    baseHref     = baseHref.replace(location.pathname, '');
+    baseHref     = el.href.replace(baseHref, '');
+    baseHref     = baseHref === '/' ? '' : baseHref;
+    return baseHref;
+  }
+
   function onpopstate() {
     var Route  = window.route;
     var routes = Route.routes;
-    var path   = location.pathname;
+    var path   = location.pathname.replace(getBaseHref(), '');
     var route  = routes[path] || routes[null];
     if (!route) { return; }
 
@@ -107,7 +117,8 @@
 
     if (absHref && !el.getAttribute('target') && !event.defaultPrevented) {
       event.preventDefault();
-      var pathname = relHref[0] === '/' ? relHref : '/' + relHref;
+      var relHref = relHref[0] === '/' ? relHref : '/' + relHref;
+      var pathname = getBaseHref() + relHref;
       if (location.pathname !== pathname) {
         window.route.pathname = pathname;
       }
