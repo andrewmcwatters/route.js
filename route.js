@@ -13,6 +13,7 @@
         return location.pathname.replace(getBaseHref(), '');
       },
       set: function(newValue) {
+        newValue = newValue[0] === '/' ? newValue : '/' + newValue;
         newValue = getBaseHref() + newValue;
         history.pushState({}, document.title, newValue);
         onpopstate();
