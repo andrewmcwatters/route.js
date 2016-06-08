@@ -27,6 +27,9 @@
   };
 
   Route.prototype.otherwise = function(params) {
+    if (typeof params === 'string') {
+      params = {redirectTo: params};
+    }
     this.when(null, params);
     return this;
   };
