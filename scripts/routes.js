@@ -1,10 +1,10 @@
 route
   .when('/Book/Moby', {
-    templateUrl: '/views/moby.html'
+    templateUrl: 'views/moby.html'
   })
   .when('/Book/Gatsby', {
-    templateUrl: '/views/gatsby.html'
+    templateUrl: 'views/gatsby.html'
   })
   .when('/Book/Scarlet', {
-    templateUrl: '/views/scarlet.html'
+    templateUrl: 'views/scarlet.html'
   });
