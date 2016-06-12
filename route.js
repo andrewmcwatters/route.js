@@ -177,6 +177,47 @@
 
   var IGNORE_URI_REGEXP = /^\s*(javascript|mailto):/i;
 
+  function serverBase(url) {
+    return url.substring(0, url.indexOf('/', url.indexOf('//') + 2));
+  }
+
+  var appBase = serverBase(location.href) + (getBaseHref() || '/');
+
+  function stripFile(url) {
+    return url.substr(0, stripHash(url).lastIndexOf('/') + 1);
+  }
+
+  var appBaseNoFile = stripFile(appBase);
+
+  function startsWith(haystack, needle) {
+    return haystack.lastIndexOf(needle, 0) === 0;
+  }
+
+  function stripBaseUrl(base, url) {
+    if (startsWith(url, base)) {
+      return url.substr(base.length);
+    }
+  }
+
+  function parseLinkUrl(url, relHref) {
+    if (relHref && relHref[0] === '#') {
+      location.hash = relHref.slice(1);
+      return true;
+    }
+    var appUrl, prevAppUrl;
+    var rewrittenUrl;
+
+    if (typeof (appUrl = stripBaseUrl(appBase, url)) !== 'undefined') {
+      prevAppUrl = appUrl;
+      rewrittenUrl = appBase + prevAppUrl;
+    } else if (typeof (appUrl = stripBaseUrl(appBaseNoFile, url)) !== 'undefined') {
+      rewrittenUrl = appBaseNoFile + appUrl;
+    } else if (appBaseNoFile === url + '/') {
+      rewrittenUrl = appBaseNoFile;
+    }
+    return !!rewrittenUrl;
+  }
+
   function onclick(event) {
     if (event.ctrlKey || event.shiftKey || event.metaKey) { return; }
     if (event.button === 2) { return; }
@@ -193,9 +234,9 @@
     if (IGNORE_URI_REGEXP.test(absHref)) return;
 
     if (absHref && !el.getAttribute('target') && !event.defaultPrevented) {
-      if (relHref[0] !== '/') {
+      if (parseLinkUrl(absHref, relHref)) {
         event.preventDefault();
-        var pathname = '/' + relHref;
+        var pathname = relHref[0] === '/' ? relHref : '/' + relHref;
         if (location.pathname !== getBaseHref() + pathname) {
           window.route.pathname = pathname;
         }
