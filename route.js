@@ -21,8 +21,41 @@
     });
   }
 
+  function pathRegExp(path) {
+    var ret = {
+          originalPath: path,
+          regexp: path
+        },
+        keys = ret.keys = [];
+
+    path = path
+      .replace(/([().])/g, '\\$1')
+      .replace(/(\/)?:(\w+)(\*\?|[\?\*])?/g, function(_, slash, key, option) {
+        var optional = (option === '?' || option === '*?') ? '?' : null;
+        var star = (option === '*' || option === '*?') ? '*' : null;
+        keys.push({ name: key, optional: !!optional });
+        slash = slash || '';
+        return ''
+          + (optional ? '' : slash)
+          + '(?:'
+          + (optional ? slash : '')
+          + (star && '(.+?)' || '([^/]+)')
+          + (optional || '')
+          + ')'
+          + (optional || '');
+      })
+      .replace(/([\/$\*])/g, '\\$1');
+
+    ret.regexp = new RegExp('^' + path + '$');
+    return ret;
+  }
+
   Route.prototype.when = function(path, route) {
-    this.routes[path] = route;
+    var regexp         = pathRegExp(path);
+    route.originalPath = regexp.originalPath;
+    route.regexp       = regexp.regexp;
+    route.keys         = regexp.keys;
+    this.routes[path]  = route;
     return this;
   };
 
@@ -35,6 +68,34 @@
   };
 
   window.route = new Route();
+
+  function switchRouteMatcher(on, route) {
+    var keys = route.keys,
+        params = {};
+
+    if (!route.regexp) return null;
+
+    var m = route.regexp.exec(on);
+    if (!m) return null;
+
+    for (var i = 1, len = m.length; i < len; ++i) {
+      var key = keys[i - 1];
+
+      var val = m[i];
+
+      if (key && val) {
+        params[key.name] = val;
+      }
+    }
+    return params;
+  }
+
+  function onroutechange(route) {
+    if (route.handler) { route.handler(); }
+
+    var event = new CustomEvent('routechange');
+    window.dispatchEvent(event);
+  }
 
   function getTemplateFor(route, callback) {
     var request = new XMLHttpRequest();
@@ -51,18 +112,24 @@
     request.send();
   }
 
-  function onroutechange(route) {
-    if (route.handler) { route.handler(); }
-
-    var event = new CustomEvent('routechange');
-    window.dispatchEvent(event);
+  function parseRoute() {
+    var Route  = window.route;
+    var routes = Route.routes;
+    var params, match;
+    for (var path in routes) {
+      if (object.hasOwnProperty(path)) {
+        var route = routes[path];
+        if (!match && (params = switchRouteMatcher(Route.pathname, route))) {
+          match = route;
+          Route.params = params;
+        }
+      }
+    }
+    return match || routes[null];
   }
 
   function onpopstate() {
-    var Route  = window.route;
-    var routes = Route.routes;
-    var path   = Route.pathname;
-    var route  = routes[path] || routes[null];
+    var route = parseRoute();
     if (!route) { return; }
 
     if (route.redirectTo) {

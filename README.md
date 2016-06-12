@@ -30,6 +30,10 @@ self
 Is a String containing an initial '/' followed by the path of the URL. If
 changed, the associated document navigates to the new route.
 
+### `route.params`
+
+`route.params` allows you to retrieve the current set of route parameters.
+
 ## Events
 
 ### routechange
