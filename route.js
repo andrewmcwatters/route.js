@@ -117,7 +117,7 @@
     var routes = Route.routes;
     var params, match;
     for (var path in routes) {
-      if (object.hasOwnProperty(path)) {
+      if (routes.hasOwnProperty(path)) {
         var route = routes[path];
         if (!match && (params = switchRouteMatcher(Route.pathname, route))) {
           match = route;
