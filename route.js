@@ -51,11 +51,25 @@
 
   Route.prototype.when = function(path, route) {
     if (path) {
-      var regexp   = pathRegExp(path);
+      var regexp = pathRegExp(path);
       route.regexp = regexp.regexp;
-      route.keys   = regexp.keys;
+      route.keys = regexp.keys;
     }
     this.routes[path] = route;
+
+    if (path) {
+      var redirectPath = (path[path.length - 1] === '/')
+            ? path.substr(0, path.length - 1)
+            : path + '/';
+
+      regexp = pathRegExp(redirectPath);
+      this.routes[redirectPath] = {
+        redirectTo: path,
+        regexp: regexp.regexp,
+        keys: regexp.keys
+      };
+    }
+
     return this;
   };
 
