@@ -239,7 +239,6 @@
     } else if (appBaseNoFile === url + '/') {
       rewrittenUrl = appBaseNoFile;
     }
-    console.log(rewrittenUrl);
     return !!rewrittenUrl;
   }
 
