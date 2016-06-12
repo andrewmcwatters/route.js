@@ -212,17 +212,6 @@
 
   var appBase = serverBase(location.href) + (baseHref() || '/');
 
-  function stripHash(url) {
-    var index = url.indexOf('#');
-    return index === -1 ? url : url.substr(0, index);
-  }
-
-  function stripFile(url) {
-    return url.substr(0, stripHash(url).lastIndexOf('/') + 1);
-  }
-
-  var appBaseNoFile = stripFile(appBase);
-
   function parseLinkUrl(url, relHref) {
     if (relHref && relHref[0] === '#') {
       location.hash = relHref.slice(1);
@@ -234,10 +223,6 @@
     if (typeof (appUrl = stripBaseUrl(appBase, url)) !== 'undefined') {
       prevAppUrl = appUrl;
       rewrittenUrl = appBase + prevAppUrl;
-    } else if (typeof (appUrl = stripBaseUrl(appBaseNoFile, url)) !== 'undefined') {
-      rewrittenUrl = appBaseNoFile + appUrl;
-    } else if (appBaseNoFile === url + '/') {
-      rewrittenUrl = appBaseNoFile;
     }
     return !!rewrittenUrl;
   }
