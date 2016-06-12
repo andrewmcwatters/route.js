@@ -50,9 +50,11 @@
   }
 
   Route.prototype.when = function(path, route) {
-    var regexp        = pathRegExp(path);
-    route.regexp      = regexp.regexp;
-    route.keys        = regexp.keys;
+    if (path) {
+      var regexp   = pathRegExp(path);
+      route.regexp = regexp.regexp;
+      route.keys   = regexp.keys;
+    }
     this.routes[path] = route;
     return this;
   };
