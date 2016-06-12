@@ -23,7 +23,6 @@
 
   function pathRegExp(path) {
     var ret = {
-          originalPath: path,
           regexp: path
         },
         keys = ret.keys = [];
@@ -51,11 +50,10 @@
   }
 
   Route.prototype.when = function(path, route) {
-    var regexp         = pathRegExp(path);
-    route.originalPath = regexp.originalPath;
-    route.regexp       = regexp.regexp;
-    route.keys         = regexp.keys;
-    this.routes[path]  = route;
+    var regexp        = pathRegExp(path);
+    route.regexp      = regexp.regexp;
+    route.keys        = regexp.keys;
+    this.routes[path] = route;
     return this;
   };
 
@@ -177,18 +175,6 @@
 
   var IGNORE_URI_REGEXP = /^\s*(javascript|mailto):/i;
 
-  function serverBase(url) {
-    return url.substring(0, url.indexOf('/', url.indexOf('//') + 2));
-  }
-
-  var appBase = serverBase(location.href) + (getBaseHref() || '/');
-
-  function stripFile(url) {
-    return url.substr(0, stripHash(url).lastIndexOf('/') + 1);
-  }
-
-  var appBaseNoFile = stripFile(appBase);
-
   function startsWith(haystack, needle) {
     return haystack.lastIndexOf(needle, 0) === 0;
   }
@@ -198,6 +184,23 @@
       return url.substr(base.length);
     }
   }
+
+  function serverBase(url) {
+    return url.substring(0, url.indexOf('/', url.indexOf('//') + 2));
+  }
+
+  var appBase = serverBase(location.href) + (getBaseHref() || '/');
+
+  function stripHash(url) {
+    var index = url.indexOf('#');
+    return index === -1 ? url : url.substr(0, index);
+  }
+
+  function stripFile(url) {
+    return url.substr(0, stripHash(url).lastIndexOf('/') + 1);
+  }
+
+  var appBaseNoFile = stripFile(appBase);
 
   function parseLinkUrl(url, relHref) {
     if (relHref && relHref[0] === '#') {
