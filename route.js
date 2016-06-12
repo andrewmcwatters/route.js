@@ -105,10 +105,10 @@
   }
 
   function onroutechange(route) {
-    if (route.handler) { route.handler(); }
-
     var event = new CustomEvent('routechange');
     window.dispatchEvent(event);
+
+    if (route.handler) { route.handler(); }
   }
 
   function getTemplateFor(route, callback) {
