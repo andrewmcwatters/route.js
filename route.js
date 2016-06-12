@@ -189,7 +189,12 @@
     return url.substring(0, url.indexOf('/', url.indexOf('//') + 2));
   }
 
-  var appBase = serverBase(location.href) + (getBaseHref() || '/');
+  var baseHref = function() {
+    var href = document.querySelector('base').getAttribute('href');
+    return href ? href.replace(/^(https?\:)?\/\/[^\/]*/, '') : '';
+  };
+
+  var appBase = serverBase(location.href) + (baseHref() || '/');
 
   function stripHash(url) {
     var index = url.indexOf('#');
