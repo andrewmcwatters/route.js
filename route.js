@@ -132,6 +132,7 @@
     var route = parseRoute();
     if (!route) { return; }
 
+    var Route = window.route;
     if (route.redirectTo) {
       Route.pathname = route.redirectTo;
       return;
