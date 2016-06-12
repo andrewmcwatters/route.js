@@ -193,10 +193,12 @@
     if (IGNORE_URI_REGEXP.test(absHref)) return;
 
     if (absHref && !el.getAttribute('target') && !event.defaultPrevented) {
-      event.preventDefault();
-      var pathname = relHref[0] === '/' ? relHref : '/' + relHref;
-      if (location.pathname !== getBaseHref() + pathname) {
-        window.route.pathname = pathname;
+      if (relHref[0] !== '/') {
+        event.preventDefault();
+        var pathname = '/' + relHref;
+        if (location.pathname !== getBaseHref() + pathname) {
+          window.route.pathname = pathname;
+        }
       }
     }
   }
