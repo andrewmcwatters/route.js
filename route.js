@@ -4,6 +4,8 @@
     return el ? el.getAttribute('href').replace(/\/$/, '') : '';
   }
 
+  var redirect = false;
+
   function Route() {
     this.routes = {};
 
@@ -15,7 +17,10 @@
       set: function(newValue) {
         newValue = newValue[0] === '/' ? newValue : '/' + newValue;
         newValue = getBaseHref() + newValue;
-        history.pushState({}, document.title, newValue);
+        history[redirect ? 'replaceState' : 'pushState'](
+          {}, document.title, newValue
+        );
+        redirect = false;
         onpopstate();
       }
     });
@@ -148,6 +153,7 @@
 
     var Route = window.route;
     if (route.redirectTo) {
+      redirect = true;
       Route.pathname = route.redirectTo;
       return;
     }
@@ -245,9 +251,8 @@
     if (absHref && !el.getAttribute('target') && !event.defaultPrevented) {
       if (parseLinkUrl(absHref, relHref)) {
         event.preventDefault();
-        var pathname = relHref[0] === '/' ? relHref : '/' + relHref;
-        if (location.pathname !== getBaseHref() + pathname) {
-          window.route.pathname = pathname;
+        if (location.pathname !== el.pathname) {
+          window.route.pathname = el.pathname.replace(getBaseHref(), '');
         }
       }
     }
