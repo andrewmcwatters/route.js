@@ -21,10 +21,10 @@ function Chapter() {
 
 route
   .when('/Book/:bookId', {
-    templateUrl: 'book.html',
+    templateUrl: 'views/book.html',
     handler: Book,
   })
   .when('/Book/:bookId/ch/:chapterId', {
-    templateUrl: 'chapter.html',
+    templateUrl: 'views/chapter.html',
     handler: Chapter
   });
