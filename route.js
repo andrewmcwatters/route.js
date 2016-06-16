@@ -6,6 +6,12 @@
 
   var redirect = false;
 
+  function fixedEncodeURIComponent(str) {
+    return str.replace(/[?]/g, function(c) {
+      return '%' + c.charCodeAt(0).toString(16).toUpperCase();
+    });
+  }
+
   function Route() {
     this.routes = {};
 
@@ -17,6 +23,7 @@
       set: function(newValue) {
         newValue = newValue[0] === '/' ? newValue : '/' + newValue;
         newValue = getBaseHref() + newValue;
+        newValue = fixedEncodeURIComponent(newValue);
         history[redirect ? 'replaceState' : 'pushState'](
           {}, document.title, newValue
         );
@@ -207,21 +214,12 @@
     }
   }
 
-  function serverBase(url) {
-    return url.substring(0, url.indexOf('/', url.indexOf('//') + 2));
-  }
+  var appBase = document.querySelector('base').href;
 
-  var baseHref = function() {
-    var href = document.querySelector('base').getAttribute('href');
-    return href ? href.replace(/^(https?\:)?\/\/[^\/]*/, '') : '';
-  };
-
-  var appBase = serverBase(location.href) + (baseHref() || '/');
-
-  function parseLinkUrl(url, relHref) {
+  function parseLinkUrl(url, relHref, el) {
     if (relHref && relHref[0] === '#') {
       location.hash = relHref.slice(1);
-      return true;
+      return false;
     }
     var appUrl, prevAppUrl;
     var rewrittenUrl;
@@ -249,10 +247,12 @@
     if (IGNORE_URI_REGEXP.test(absHref)) return;
 
     if (absHref && !el.getAttribute('target') && !event.defaultPrevented) {
-      if (parseLinkUrl(absHref, relHref)) {
+      if (parseLinkUrl(absHref, relHref, el)) {
         event.preventDefault();
         if (location.pathname !== el.pathname) {
-          window.route.pathname = el.pathname.replace(getBaseHref(), '');
+          var pathname = el.pathname;
+          pathname = stripBaseUrl(getBaseHref(), pathname) || pathname;
+          window.route.pathname = pathname;
         }
       }
     }

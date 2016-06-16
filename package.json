@@ -1,6 +1,6 @@
 {
   "name": "route.js",
-  "version": "1.4.12",
+  "version": "1.4.13",
   "description": "Provides routing and deeplinking",
   "main": "route.js",
   "scripts": {
