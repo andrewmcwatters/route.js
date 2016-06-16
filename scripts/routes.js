@@ -4,7 +4,7 @@ function scope(model, value) {
 }
 
 window.addEventListener('routechange', function() {
-  scope('location.pathname', location.pathname);
+  scope('route.pathname', route.pathname);
   scope('route.params', JSON.stringify(route.params));
 });
 
