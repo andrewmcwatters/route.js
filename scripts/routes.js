@@ -1,5 +1,5 @@
 function scope(model, value) {
-  var elements = document.querySelectorAll('[data-bind=\" + model + \"]');
+  var elements = document.querySelectorAll('[data-bind=" + model + "]');
   for (var i = 0; i < elements.length; i++) { elements[i].textContent = value; }
 }
 
