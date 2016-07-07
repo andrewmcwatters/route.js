@@ -4,13 +4,13 @@
     return el ? el.getAttribute('href').replace(/\/$/, '') : '';
   }
 
-  var redirect = false;
-
   function fixedEncodeURIComponent(str) {
     return str.replace(/[?]/g, function(c) {
       return '%' + c.charCodeAt(0).toString(16).toUpperCase();
     });
   }
+
+  var redirect = false;
 
   function Route() {
     this.routes = {};
