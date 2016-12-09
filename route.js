@@ -195,8 +195,10 @@
     var el = document.querySelector('[data-view]');
     if (el) {
       el.innerHTML = route.template;
-      var event = new CustomEvent('viewcontentloaded');
-      el.dispatchEvent(event);
+      setTimeout(function() {
+        var event = new CustomEvent('viewcontentloaded');
+        el.dispatchEvent(event);
+      });
     }
   }
 
