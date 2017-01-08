@@ -2,15 +2,12 @@
 Provides routing and deeplinking
 
 ## Install
-
 ### npm
-
 ```shell
 npm install andrewmcwatters/route.js
 ```
 
 ## Methods
-
 ### `route.when(path, route);`
 Adds a new route definition to the `Route` interface.
 
@@ -25,17 +22,14 @@ definition is matched.
 self
 
 ## Properties
-
 ### `route.pathname`
 Is a String containing an initial '/' followed by the path of the URL. If
 changed, the associated document navigates to the new route.
 
 ### `route.params`
-
 `route.params` allows you to retrieve the current set of route parameters.
 
 ## Events
-
 ### routechange
 Dispatched after a route change has happened.
 
@@ -49,7 +43,6 @@ Dispatched every time the view content is reloaded.
 the current data-view element
 
 ## License
-
 The MIT License
 
 Copyright (c) 2017 Andrew McWatters. http://andrewmcwatters.com
