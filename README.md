@@ -2,9 +2,9 @@
 Provides routing and deeplinking
 
 ## Install
-### npm
+### yarn
 ```shell
-npm install andrewmcwatters/route.js
+yarn add andrewmcwatters/route.js
 ```
 
 ## Methods
