@@ -4,7 +4,7 @@ Provides routing and deeplinking
 ## Install
 ### yarn
 ```shell
-yarn add andrewmcwatters/route.js
+yarn add andrewmcwatters/route.js#v1.4.17
 ```
 
 ## Methods
